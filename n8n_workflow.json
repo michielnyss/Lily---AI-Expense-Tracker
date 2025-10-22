@@ -1,0 +1,1370 @@
+{
+  "name": "Lily",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1200,
+        -96
+      ],
+      "id": "544b3d0a-a036-49ac-ab62-4d80b2e38d05",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "0TIswBnhfM8xIMJL",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "={{JSON.stringify($json.schema) }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1488,
+        -96
+      ],
+      "id": "bb4dcb6b-9cb6-40ec-8fa8-dbda045f1f33",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTimeTool",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        32
+      ],
+      "id": "f8c47f4d-d47a-4ece-b9b0-5cce01af8369",
+      "name": "Date & Time"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are Lily, a helpful assistant. Answer the user ({{ $('Discord trigger').item.json.body.author.username }}) his question based on transaction data (from google sheets). Use discord formatting and limit your message to 1000 characters (including spaces, punctuation, and line breaks). Here is the question:  {{ $('Discord trigger').item.json.body.content.text }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1248,
+        192
+      ],
+      "id": "d89d2128-9e9a-4bc9-82a4-f41490f7208b",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "list",
+          "cachedResultName": "gpt-5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1056,
+        384
+      ],
+      "id": "f5d13a50-593e-4f0a-9cc3-1d78682738bb",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "0TIswBnhfM8xIMJL",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        1536,
+        384
+      ],
+      "id": "30b499b1-c9d4-4a15-888a-9c2eeccb9228",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        256,
+        -128
+      ],
+      "id": "9baaad29-2e5e-4632-99b5-2a61a719099b",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "0TIswBnhfM8xIMJL",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTimeTool",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        384
+      ],
+      "id": "c5544cc2-183f-4775-91bd-fed00c20e0dd",
+      "name": "Date & Time2"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d034a673-140a-489d-88d9-ce1243e42291",
+                    "leftValue": "={{ $('Discord trigger').item.json.body.content.text }}",
+                    "rightValue": "!help",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Discord trigger').item.json.body.content.text }}",
+                    "rightValue": "!get_balance",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "7c7e0551-2289-45c6-9b8b-6f22032d112b"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ebee6b17-1a83-47e4-b4a3-748184ea29af",
+                    "leftValue": "={{ $('Discord trigger').item.json.body.content.text }}",
+                    "rightValue": "!get_transactions",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -32,
+        240
+      ],
+      "id": "d602948e-12e5-4703-8c51-6fff1c43e6c0",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "expense-tracker",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -464,
+        0
+      ],
+      "id": "63e950cb-d3ef-4946-bafd-a895b9ff09cd",
+      "name": "Discord trigger",
+      "webhookId": "f4b76260-3c34-4836-ac34-1a7c6e32d38c"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0085c67a-24d9-4a31-be99-1dd9d154797f",
+              "leftValue": "={{ $json.body.content.text }}",
+              "rightValue": "!",
+              "operator": {
+                "type": "string",
+                "operation": "notStartsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -256,
+        0
+      ],
+      "id": "5f98dbfa-05ba-4095-a69e-01fb28999563",
+      "name": "AI or fixed expression"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d5be1e98-36af-4024-8344-553fd0da53ab",
+              "leftValue": "={{ $json.body.content.text}}",
+              "rightValue": "Lily",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "becd6786-eedc-4215-a0ab-63dd1e7f1557",
+              "leftValue": "={{ $json.body.content.text}}",
+              "rightValue": "lily",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -16,
+        -272
+      ],
+      "id": "5a48038d-5e32-476d-ad01-1357f26d52b6",
+      "name": "Only move forward if they use \"Lily\""
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a helpfull assistant that categories the question into one of the following buckets [\"Add transaction\", \"Ask spending/income insights\"]. Your answer is limited to the title of the bucket. Here is the question: {{ $json.body.content.text }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        -288
+      ],
+      "id": "e17b5d26-851b-43b3-a164-759293c061e0",
+      "name": "Interpret purpose of message"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Add transaction",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "f522f5dd-ac8b-4309-9255-80a9dedb5088"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "88f2b931-54d4-4614-b6a0-6e3410601553",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Ask spending/income insights",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        592,
+        -96
+      ],
+      "id": "7cafdf87-9a27-4a13-90dd-d93f57db630a",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ",
+          "mode": "list",
+          "cachedResultName": "Transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2124930965,
+          "mode": "list",
+          "cachedResultName": "Categories",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ/edit#gid=2124930965"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "User",
+              "lookupValue": "={{ $('Discord trigger').item.json.body.author.username }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        864,
+        -288
+      ],
+      "id": "05361147-3c6b-4933-8035-a8a50b6d49fe",
+      "name": "Get categories",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2oYSWlUnojB0fa0t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\njsn = {}\nfor item in _input.all():\n  jsn[item[\"json\"][\"Category\"]] = []\n\n\nfor item in items:\n  jsn[item[\"json\"][\"Category\"]].append(item[\"json\"][\"Subcategory\"])\n\n# categories = list(jsn.keys())\n# subcategories = []\n# sub_str = \"The subcategroy depends on the category, here is the hierarchy: \"\n# for cat, subs in jsn.items():\n#   sub_str += f\"{cat} = (\"\n#   for sub in subs:\n#     sub_str += f\"{sub}, \"\n#     subcategories.append(sub)\n#   sub_str += \"), \"\n\n# # return {\"test\": \"test\"}\n# return {\"categories\": categories,\n#         \"subcategories\": subcategories,\n        \n#        \"subcategory_hier\": sub_str}\n\nimport json\n\ndef generate_transaction_schema(category_dict):\n    \"\"\"\n    Generate a JSON schema for transactions based on category-subcategory mapping.\n    \n    Args:\n        category_dict (dict): Keys are category names, values are lists of subcategories.\n    \n    Returns:\n        dict: JSON schema for transaction.\n    \"\"\"\n    # Flatten all subcategories for the main enum\n    all_subcategories = [sub for subs in category_dict.values() for sub in subs]\n    \n    # Build conditional rules for category -> subcategory validation\n    all_of = []\n    for category, subcategories in category_dict.items():\n        all_of.append({\n            \"if\": {\"properties\": {\"category\": {\"const\": category}}},\n            \"then\": {\"properties\": {\"subcategory\": {\"enum\": subcategories}}}\n        })\n    \n    schema = {\n        \"$schema\": \"https://json-schema.org/draft/2020-12/schema\",\n        \"title\": \"Transaction\",\n        \"type\": \"object\",\n        \"description\": \"Schema for tracking income and expense transactions.\",\n        \"properties\": {\n            \"type\": {\n                \"type\": \"string\",\n                \"enum\": [\"Income\", \"Expense\"],\n                \"description\": \"Specifies whether the transaction is income or expense.\"\n            },\n            \"funny_note\": {\n                \"type\": \"string\",\n                \"description\": \"A short, sassy, and judgmental note about the transaction.\"\n            },\n            \"date\": {\n                \"type\": \"string\",\n                \"format\": \"date\",\n                \"description\": \"Date of transaction in YYYY-MM-DD format.\"\n            },\n            \"category\": {\n                \"type\": \"string\",\n                \"enum\": list(category_dict.keys()),\n                \"description\": \"Main category of the transaction.\"\n            },\n            \"subcategory\": {\n                \"type\": \"string\",\n                \"enum\": all_subcategories,\n                \"description\": \"Subcategory corresponding to the selected category.\"\n            },\n            \"amount\": {\n                \"type\": \"number\",\n                \"minimum\": 0,\n                \"description\": \"Numeric amount of the transaction, in EUR. Can include decimals.\"\n            },\n            \"description\": {\n                \"type\": \"string\",\n                \"description\": \"Free-text description of the transaction.\"\n            }\n        },\n        \"required\": [\"type\", \"date\", \"category\", \"subcategory\", \"amount\", \"description\", \"funny_note\"],\n        \"allOf\": all_of\n    }\n    \n    return schema\n\n\nschema = generate_transaction_schema(jsn)\n\n# Output as JSON string (optional: for n8n JSON input)\nreturn {\"schema\": schema}\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1056,
+        -288
+      ],
+      "id": "27a7ecfd-ea6a-41b4-9955-9c21e1b4ff43",
+      "name": "Create JSON schema",
+      "alwaysOutputData": false,
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=  your name is Lily and you are a helpfull assistant, answer this message.:{{ $('Discord trigger').first().json.body.original_message.content }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1248,
+        -288
+      ],
+      "id": "48852b1f-7c4e-45c9-a363-45cd1e767e78",
+      "name": "Parse into transaction object"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ",
+          "mode": "list",
+          "cachedResultName": "Transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Entries",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "User": "={{ $('Discord trigger').first().json.body.author.username }}",
+            "Type": "={{ $json.output.type }}",
+            "Date": "={{ $json.output.date }}",
+            "Category": "={{ $json.output.category }}",
+            "Amount": "={{ $json.output.amount }}",
+            "Description": "={{ $json.output.description }}",
+            "Env": "={{ $('Discord trigger').first().json.body.channel.name }}",
+            "Subcategory": "={{ $json.output.subcategory }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "User",
+              "displayName": "User",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Type",
+              "displayName": "Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Amount",
+              "displayName": "Amount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Subcategory",
+              "displayName": "Subcategory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Env",
+              "displayName": "Env",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1616,
+        -288
+      ],
+      "id": "07c40a71-56be-4828-a434-efbab8189923",
+      "name": "Add transaction in DB",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2oYSWlUnojB0fa0t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1426713293409751113",
+          "mode": "list",
+          "cachedResultName": "AI Agent",
+          "cachedResultUrl": "https://discord.com/channels/1426713293409751113"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Discord trigger').first().json.body.channel.id }}",
+          "mode": "id"
+        },
+        "content": "={{ $json.message }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        2368,
+        624
+      ],
+      "id": "6fc9db9c-6fd5-454d-9036-f2a163790b54",
+      "name": "Send discord message",
+      "webhookId": "657aed7d-f50d-4e05-ad88-721383ee985f",
+      "credentials": {
+        "discordBotApi": {
+          "id": "0NI8vdh71Kz1xzEO",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1426713293409751113",
+          "mode": "list",
+          "cachedResultName": "AI Agent",
+          "cachedResultUrl": "https://discord.com/channels/1426713293409751113"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Discord trigger').first().json.body.channel.id }}",
+          "mode": "id"
+        },
+        "content": "=\n",
+        "options": {},
+        "embeds": {
+          "values": [
+            {
+              "inputMethod": "json",
+              "json": "={{JSON.stringify( $json.embed_json) }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        992
+      ],
+      "id": "4fffc984-9e13-4bef-a9c5-7fd7c2cb4846",
+      "name": "Send embed message",
+      "webhookId": "657aed7d-f50d-4e05-ad88-721383ee985f",
+      "credentials": {
+        "discordBotApi": {
+          "id": "0NI8vdh71Kz1xzEO",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\ninput = _('Parse into transaction object').first().json.output\n\n\nmessage = f\"Hi *{_input.first().json.User}*, {input['funny_note']} \"\nmessage += \"\\nHere is an overview of your transaction:\"\nfor item, value in input.items():\n  if item != \"funny_note\":\n    if item == \"amount\":\n      message += f\"\\n>** {item.capitalize()}**:€ {value}\"\n    else:\n      message += f\"\\n>**{item.capitalize()}**: {value}\"\n\nmessage += \"\\n*Your transaction has been successfully recorded!*\"\n\nreturn {\"message\": message}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1824,
+        -288
+      ],
+      "id": "14dc7049-f0b7-4733-8b40-024dd3178971",
+      "name": "Generate discord message"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nmessage = f\"Hi {_input.first().json.body.author.username}, here is an overview of the current stuff you can do with me :wink::\"\n\nmessage += \"\\n\\n**Add transaction**\"\nmessage += \"\\nJust send a message with your transactions details (date, amount, description) and don't forget to call me by my name :face_holding_back_tears:\"\n\nmessage += \"\\n\\n*example*\"\nmessage += \"\\nHi Lily, yesterday I spent €32 on a boat trip to Madagascar\"\n\nmessage += \"\\n\\n**Get implied bank account balance**\"\nmessage += \"\\nBy typing *'!get_balance'* you will get the balance of your transactions (aka income - expenses)\"\n\nmessage += \"\\n\\n**Get last transactions**\"\nmessage += \"\\nBy typing *'!get_transactions'* you will get a list of transactions over the past 5 days\"\n\nreturn {\"message\": message}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        624
+      ],
+      "id": "3a66810e-9fb1-4e9a-b6d1-f950e6a3344e",
+      "name": "Generate discord message1"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nbalance = 0\nfor item in _input.all():\n  if item[\"json\"][\"Type\"] == \"Income\":\n    balance += float(item[\"json\"][\"Amount\"])\n\n  elif item[\"json\"][\"Type\"] == \"Expense\":\n    balance -= float(item[\"json\"][\"Amount\"])\n\nmessage = f\"Hi {_('Discord trigger').first().json.body.author.username}, your current balance is **€ {round(balance, 2)}**\"\n\nreturn {\"message\": message}\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        800
+      ],
+      "id": "3fbcc8ef-c358-4a04-bf76-715e2d972563",
+      "name": "Generate discord message2",
+      "alwaysOutputData": false,
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfrom datetime import datetime, timedelta\n\nbalance = 0\nlst = []\n\nupper_date_bound = datetime.today().date()\nlower_date_bound = upper_date_bound - timedelta(days=5)\n\n# Collect items from last 7 days\nfor item in _input.all():\n    date_string = item[\"json\"][\"Date\"]\n    date_object = datetime.strptime(date_string, \"%d-%m-%Y\").date()\n    \n    if lower_date_bound <= date_object <= upper_date_bound:\n        item[\"json\"][\"DateObject\"] = date_object\n        lst.append(item[\"json\"])\n\n# Sort by date descending\nlst.sort(key=lambda x: x[\"DateObject\"], reverse=True)\n\n# Columns you want\ndesired_order = [\"Date\", \"Type\", \"Category\", \"Subcategory\", \"Amount\", \"Description\"]\n\n# Build Discord embed fields\nembed_fields = []\nfor item in lst:\n    field_value = \"\"\n    for col in desired_order[1:]:  # Skip Date in the inline title\n      if col == \"Amount\":\n        field_value += f\"**{col}:** €{item.get(col, '')}\\n\"\n      else:\n        field_value += f\"**{col}:** {item.get(col, '')}\\n\"\n    \n    embed_fields.append({\n        \"name\": item.get(\"Date\", \"Unknown Date\"),\n        \"value\": field_value,\n        \"inline\": False\n    })\n\n# Construct embed JSON\nembed_json = {\n    \"title\": \"Transaction Log (Last 5 Days)\",\n    \"color\": 6579309,  # blue\n    \"fields\": embed_fields\n}\n\n# Remove temporary DateObject\nfor item in lst:\n    item.pop(\"DateObject\", None)\n\nreturn {\"balance\": lst, \"embed_json\": embed_json}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        992
+      ],
+      "id": "5759ad42-0357-491c-8b8e-d3b9353072bc",
+      "name": "Generate discord message3",
+      "alwaysOutputData": false,
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ",
+          "mode": "list",
+          "cachedResultName": "Transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Entries",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "User",
+              "lookupValue": "={{ $json.body.author.username }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        608,
+        800
+      ],
+      "id": "24e21dab-a9f2-4e34-8772-a1d27778fa5e",
+      "name": "Get transaction data1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2oYSWlUnojB0fa0t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ",
+          "mode": "list",
+          "cachedResultName": "Transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Entries",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "User",
+              "lookupValue": "={{ $json.body.author.username }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        608,
+        992
+      ],
+      "id": "67c745a4-b58b-4757-9a34-24ccafe28d54",
+      "name": "Get transaction data2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2oYSWlUnojB0fa0t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nreturn {\"message\":_input.first().json.output }"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        192
+      ],
+      "id": "f47e45fc-fce9-4d7c-be2c-3bd16802429d",
+      "name": "Code in Python (Beta)"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1426713293409751113",
+          "mode": "list",
+          "cachedResultName": "AI Agent",
+          "cachedResultUrl": "https://discord.com/channels/1426713293409751113"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Discord trigger').first().json.body.channel.id }}",
+          "mode": "id"
+        },
+        "content": "=Hi {{ $('Discord trigger').item.json.body.author.username }}, Let me analyse your transactions and give you a comprehensive answer, this might take a couple of minutes.\n\n*analysing...*\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        880,
+        192
+      ],
+      "id": "c9ccd49a-f666-4524-9f3e-c486f1bccf5a",
+      "name": "Send discord message1",
+      "webhookId": "657aed7d-f50d-4e05-ad88-721383ee985f",
+      "credentials": {
+        "discordBotApi": {
+          "id": "0NI8vdh71Kz1xzEO",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ",
+          "mode": "list",
+          "cachedResultName": "Transactions",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Entries",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WFvU9fV3TylQolX6Mftj2G1hnRSUEvgu7ZWDkfU2DRQ/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        1280,
+        384
+      ],
+      "id": "7925fe8b-4d43-4bbe-8147-7a81a7efdc7a",
+      "name": "Get transaction data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2oYSWlUnojB0fa0t",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chartType": "pie",
+        "labelsMode": "array",
+        "labelsArray": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Labels_Array', ``, 'string') }}",
+        "data": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Data', ``, 'json') }}",
+        "output": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Put_Output_In_Field', ``, 'string') }}",
+        "chartOptions": {},
+        "datasetOptions": {}
+      },
+      "type": "n8n-nodes-base.quickChartTool",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        384
+      ],
+      "id": "058601ee-3d4a-44f6-af75-960949c1019d",
+      "name": "QuickChart"
+    }
+  ],
+  "pinData": {
+    "Discord trigger": [
+      {
+        "json": {
+          "headers": {
+            "host": "dinys8.app.n8n.cloud",
+            "user-agent": "axios/1.8.4",
+            "content-length": "1334",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "208.77.246.49",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "SG",
+            "cf-ray": "9923000bb1d7f8de-SIN",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "x-forwarded-for": "208.77.246.49, 172.68.164.68",
+            "x-forwarded-host": "dinys8.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-56-6f4b847c49-k42np",
+            "x-is-trusted": "yes",
+            "x-real-ip": "208.77.246.49"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event_type": "message_create",
+            "timestamp": 1761073251137,
+            "content": {
+              "text": "Lily, could you give me an overview of my expenses from this and last week",
+              "type": "message_create"
+            },
+            "author": {
+              "id": "261567925645869057",
+              "username": "_dinys",
+              "discriminator": "0"
+            },
+            "channel": {
+              "id": "1427628111142326404",
+              "name": "personal-finance",
+              "type": "text"
+            },
+            "guild": {
+              "id": "1426713293409751113",
+              "name": "AI Agent"
+            },
+            "message_id": "1430269621583347917",
+            "original_message": {
+              "channelId": "1427628111142326404",
+              "guildId": "1426713293409751113",
+              "id": "1430269621583347917",
+              "createdTimestamp": 1761073250910,
+              "type": 0,
+              "system": false,
+              "content": "Lily, could you give me an overview of my expenses from this and last week",
+              "authorId": "261567925645869057",
+              "pinned": false,
+              "tts": false,
+              "nonce": "1430269620543029248",
+              "embeds": [],
+              "components": [],
+              "attachments": [],
+              "stickers": [],
+              "position": null,
+              "roleSubscriptionData": null,
+              "resolved": null,
+              "editedTimestamp": null,
+              "mentions": {
+                "everyone": false,
+                "users": [],
+                "roles": [],
+                "crosspostedChannels": [],
+                "repliedUser": null,
+                "members": [],
+                "channels": []
+              },
+              "webhookId": null,
+              "groupActivityApplicationId": null,
+              "applicationId": null,
+              "activity": null,
+              "flags": 0,
+              "reference": null,
+              "interactionMetadata": null,
+              "interaction": null,
+              "poll": null,
+              "messageSnapshots": [],
+              "call": null,
+              "cleanContent": "Lily, could you give me an overview of my expenses from this and last week"
+            }
+          },
+          "webhookUrl": "https://dinys8.app.n8n.cloud/webhook/expense-tracker",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Parse into transaction object",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Parse into transaction object",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "ai_tool": [
+        [
+          {
+            "node": "Parse into transaction object",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Code in Python (Beta)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Interpret purpose of message",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time2": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Generate discord message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get transaction data1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get transaction data2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discord trigger": {
+      "main": [
+        [
+          {
+            "node": "AI or fixed expression",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI or fixed expression": {
+      "main": [
+        [
+          {
+            "node": "Only move forward if they use \"Lily\"",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Only move forward if they use \"Lily\"": {
+      "main": [
+        [
+          {
+            "node": "Interpret purpose of message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Interpret purpose of message": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Get categories",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send discord message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get categories": {
+      "main": [
+        [
+          {
+            "node": "Create JSON schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create JSON schema": {
+      "main": [
+        [
+          {
+            "node": "Parse into transaction object",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse into transaction object": {
+      "main": [
+        [
+          {
+            "node": "Add transaction in DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add transaction in DB": {
+      "main": [
+        [
+          {
+            "node": "Generate discord message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate discord message": {
+      "main": [
+        [
+          {
+            "node": "Send discord message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate discord message1": {
+      "main": [
+        [
+          {
+            "node": "Send discord message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate discord message2": {
+      "main": [
+        [
+          {
+            "node": "Send discord message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate discord message3": {
+      "main": [
+        [
+          {
+            "node": "Send embed message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get transaction data1": {
+      "main": [
+        [
+          {
+            "node": "Generate discord message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get transaction data2": {
+      "main": [
+        [
+          {
+            "node": "Generate discord message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in Python (Beta)": {
+      "main": [
+        [
+          {
+            "node": "Send discord message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send discord message1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get transaction data": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "QuickChart": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "952d6a40-73df-4535-9877-65ff5b675261",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b3086a8e495a04bca3952edc81c79515441f7a370e59bbed08b51958e3a6e920"
+  },
+  "id": "QEmNDnniILSdoM3w",
+  "tags": []
+}
